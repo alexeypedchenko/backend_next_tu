@@ -1,7 +1,21 @@
 import '../styles/globals.css'
+import DefaultLayout from '../components/Layouts/DefaultLayout'
+import StoreProviderHoc from '../store/StoreProviderHoc'
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+const MyApp = ({ Component, pageProps }) => {
+  const pageLayout = Component.getLayout || null
+
+  return (
+    <StoreProviderHoc>
+      {pageLayout ? (
+        pageLayout(<Component {...pageProps} />)
+      ) : (
+        <DefaultLayout>
+          <Component {...pageProps} />
+        </DefaultLayout>
+      )}
+    </StoreProviderHoc>
+  )
 }
 
 export default MyApp
