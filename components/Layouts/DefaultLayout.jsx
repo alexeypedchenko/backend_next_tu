@@ -11,17 +11,17 @@ const Layout = ({ children }) => {
   const authWatcher = useAuthWatcher()
   const { isAuth } = useSelector(selectUser)
 
-  useEffect(() => {
-    if (!isAuth) {
-      router.push('/login')
-    }
-  }, [isAuth])
+  // useEffect(() => {
+  //   if (!isAuth) {
+  //     router.push('/login')
+  //   }
+  // }, [isAuth])
 
-  if (!isAuth) return (
-    <div>
-      load...
-    </div>
-  )
+  // if (!isAuth) return (
+  //   <div>
+  //     load...
+  //   </div>
+  // )
 
   return (
     <>

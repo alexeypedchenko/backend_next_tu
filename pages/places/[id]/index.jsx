@@ -15,11 +15,13 @@ const Index = () => {
 
   return (
     <div>
-      id - {id}
-      <Button variant="contained" onClick={() => router.push('/places')}>
-        Назад
-      </Button>
-      <PlaceForm place={place} />
+      <div className="page-head">
+        Place - {id}
+        <Button variant="contained" onClick={() => router.push('/places')}>
+          Назад
+        </Button>
+      </div>
+      {place && (<PlaceForm isUpdate propPlace={place} />)}
     </div>
   )
 }

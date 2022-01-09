@@ -8,10 +8,12 @@ const Index = () => {
 
   return (
     <div>
-      <h1>Создать новое место</h1>
-      <Button variant="contained" onClick={() => router.push('/places')}>
-        Назад
-      </Button>
+      <div className="page-head">
+        <h1>Создать новое место</h1>
+        <Button variant="contained" onClick={() => router.push('/places')}>
+          Назад
+        </Button>
+      </div>
 
       <PlaceForm />
     </div>

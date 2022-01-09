@@ -10,6 +10,8 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@googlemaps/js-api-loader": "^1.13.1",
+    "@googlemaps/markerclustererplus": "^1.2.10",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.7",
     "@reduxjs/toolkit": "^1.7.1",

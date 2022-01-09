@@ -3,96 +3,112 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { addDbDoc, updateDbDoc } from '../../firebase/firebaseFirestore'
+import Map from '../Map/Map'
 
-const defaultPlace = {
-  name: 'name',
-  description: 'description',
-}
-
-const PlaceForm = ({ place }) => {
+const PlaceForm = ({ isUpdate, propPlace }) => {
+  const [place, setPlace] = useState(propPlace)
   const [load, setLoad] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
-
-  const [fields, setFields] = useState({ name: 'name', description: 'description' })
-  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 })
-
-  useEffect(() => {
-    console.log('useEffect place:')
-    if (place) {
-      setIsEdit(true)
-      setCoordinates({ ...place.coordinates })
-      setFields({name: place.name, description: place.description})
-    }
-  }, [place])
-
-  const onChangeFields = (event) => {
-    const { name, value } = event.target
-    setFields({ ...fields, [name]: value })
-  }
-  const onChangeCoordinates = (event) => {
-    const { name, value } = event.target
-    setCoordinates({ ...coordinates, [name]: value })
-  }
 
   const send = async () => {
-    let newPlace = {}
-    if (isEdit) {
+    if (isUpdate) {
       const id = place.id
-      delete place.id
-      newPlace = {...place, ...fields}
-      newPlace.coordinates = { ...coordinates }
-      console.log('isEdit:')
-      console.log('id:', id)
+      const newPlace = {...place}
+      delete newPlace.id
       updateDbDoc('places', id, newPlace)
       return
     }
 
-    newPlace = { ...fields }
-    newPlace.coordinates = { ...coordinates }
-
-    addDbDoc('places', newPlace).then((docId) => {
+    addDbDoc('places', place).then((docId) => {
       console.log('create new place:', docId)
     })
+  }
 
+  if (!place) {
+    return (
+      <p>load</p>
+    )
   }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
-        {Object.keys(fields).map((key) => (
-          <TextField
-            style={{ marginBottom: 20, width: '100%' }}
-            key={key}
-            label={key}
-            name={key}
-            variant="outlined"
-            placeholder={`Введите ${key}`}
-            value={fields[key]}
-            onChange={onChangeFields}
-          />
-        ))}
+        <TextField
+          style={{ marginBottom: 20, width: '100%' }}
+          label="Название"
+          variant="outlined"
+          placeholder="Введите название места"
+          value={place.name}
+          onChange={(event) => setPlace({ ...place, name: event.target.value })}
+        />
+        <TextField
+          style={{ marginBottom: 20, width: '100%' }}
+          label="Описание"
+          variant="outlined"
+          placeholder="Введите описание места"
+          value={place.description}
+          onChange={(event) => setPlace({ ...place, description: event.target.value })}
+        />
       </Grid>
-      <Grid item xs={6} md={6}>
-        {Object.keys(coordinates).map((key) => (
-          <TextField
-            style={{ marginBottom: 20, width: '100%' }}
-            key={key}
-            label={key}
-            name={key}
-            variant="outlined"
-            placeholder={`Введите ${key}`}
-            value={coordinates[key]}
-            onChange={onChangeCoordinates}
-          />
-        ))}
+      <Grid item xs={12} sm={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <TextField
+              style={{ marginBottom: 20, width: '100%' }}
+              size="small"
+              label="Lat"
+              type="number"
+              variant="outlined"
+              placeholder="Введите lat места"
+              value={place.coordinates.lat}
+              onChange={(event) => setPlace({
+                ...place,
+                coordinates: {
+                  ...place.coordinates,
+                  lat: event.target.value
+                }
+              })}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              style={{ marginBottom: 20, width: '100%' }}
+              size="small"
+              label="Lng"
+              type="number"
+              variant="outlined"
+              placeholder="Введите lng места"
+              value={place.coordinates.lng}
+              onChange={(event) => setPlace({
+                ...place,
+                coordinates: {
+                  ...place.coordinates,
+                  lng: event.target.value
+                }
+              })}
+            />
+          </Grid>
+        </Grid>
+        <Map />
       </Grid>
       <Grid item xs={12} sm={6}>
         <Button variant="contained" onClick={send}>
           Отправить
         </Button>
       </Grid>
+      <Grid item xs={12} sm={6}>
+        <Map markers={[place]} setCoordinates={(coordinates) => setPlace({ ...place, coordinates })} />
+      </Grid>
     </Grid>
   )
+}
+
+PlaceForm.defaultProps = {
+  isUpdate: false,
+  propPlace: {
+    name: 'name',
+    description: 'description',
+    coordinates: { lat: 46.48, lng: 30.72 }
+  }
 }
 
 export default PlaceForm

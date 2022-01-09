@@ -25,3 +25,10 @@ a:hover {
 .mb {
   margin-bottom: 20px;
 }
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
