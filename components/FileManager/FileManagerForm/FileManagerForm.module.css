@@ -1,0 +1,33 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.formField {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.formField:not(:last-child) {
+  margin-bottom: 20px;
+}
+.formField p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+.formField input,
+.formField select {
+  width: 100%;
+}
+.formField button {
+  display: block;
+  margin: 0 auto;
+  padding: 5px 10px;
+}
+.formRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.formRow .formField {
+  width: calc(50% - 10px);
+}
