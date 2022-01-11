@@ -1,25 +1,58 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/router'
+
+import { addDbDoc, deleteDbDoc, updateDbDoc } from '../../firebase/firebaseFirestore'
+import { setChangeState } from '../../utils/setChangeState'
+
 import Grid from '@mui/material/Grid'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import { addDbDoc, updateDbDoc } from '../../firebase/firebaseFirestore'
-import Map from '../Map/Map'
+import PlaceFormMap from './PlaceFormMap';
+import PlaceFormDescription from './PlaceFormDescription';
+import PlaceFormHead from './PlaceFormHead';
 
 const PlaceForm = ({ isUpdate, propPlace }) => {
+  const router = useRouter()
   const [place, setPlace] = useState(propPlace)
-  const [load, setLoad] = useState(false)
+  const [coordinates, setCoordinates] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleChange = (event) => setChangeState(event, place, setPlace)
+
+  useEffect(() => {
+    if (!coordinates) return
+    setPlace({ ...place, coordinates })
+  }, [coordinates])
 
   const send = async () => {
+    setIsLoading(true)
+
     if (isUpdate) {
       const id = place.id
-      const newPlace = {...place}
+      const newPlace = { ...place }
       delete newPlace.id
-      updateDbDoc('places', id, newPlace)
+      updateDbDoc('places', id, newPlace).then(() => {
+        toast.success(`Place: ${place.name} updated`)
+      }).finally(() => {
+        setIsLoading(false)
+      })
       return
     }
 
     addDbDoc('places', place).then((docId) => {
-      console.log('create new place:', docId)
+      toast.success('Place created')
+      router.push('/places')
+    }).finally(() => {
+      setIsLoading(false)
+    })
+  }
+
+  const deleteDoc = () => {
+    setIsLoading(true)
+    deleteDbDoc('places', place.id).then((docId) => {
+      toast.warn(`Place: ${place.name} deleted`)
+      router.push('/places')
+    }).finally(() => {
+      setIsLoading(false)
     })
   }
 
@@ -30,74 +63,30 @@ const PlaceForm = ({ isUpdate, propPlace }) => {
   }
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          style={{ marginBottom: 20, width: '100%' }}
-          label="Название"
-          variant="outlined"
-          placeholder="Введите название места"
-          value={place.name}
-          onChange={(event) => setPlace({ ...place, name: event.target.value })}
-        />
-        <TextField
-          style={{ marginBottom: 20, width: '100%' }}
-          label="Описание"
-          variant="outlined"
-          placeholder="Введите описание места"
-          value={place.description}
-          onChange={(event) => setPlace({ ...place, description: event.target.value })}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              style={{ marginBottom: 20, width: '100%' }}
-              size="small"
-              label="Lat"
-              type="number"
-              variant="outlined"
-              placeholder="Введите lat места"
-              value={place.coordinates.lat}
-              onChange={(event) => setPlace({
-                ...place,
-                coordinates: {
-                  ...place.coordinates,
-                  lat: event.target.value
-                }
-              })}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              style={{ marginBottom: 20, width: '100%' }}
-              size="small"
-              label="Lng"
-              type="number"
-              variant="outlined"
-              placeholder="Введите lng места"
-              value={place.coordinates.lng}
-              onChange={(event) => setPlace({
-                ...place,
-                coordinates: {
-                  ...place.coordinates,
-                  lng: event.target.value
-                }
-              })}
-            />
-          </Grid>
-        </Grid>
-        <Map />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Button variant="contained" onClick={send}>
-          Отправить
-        </Button>
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <Map markers={[place]} setCoordinates={(coordinates) => setPlace({ ...place, coordinates })} />
-      </Grid>
+    <Grid container spacing={4}>
+      {/* head */}
+      <PlaceFormHead
+        place={place}
+        isLoading={isLoading}
+        isUpdate={isUpdate}
+        onChange={handleChange}
+        onDelete={deleteDoc}
+        onSend={send}
+      />
+
+      {/* left column */}
+      <PlaceFormDescription
+        place={place}
+        onChange={handleChange}
+        setImage={(file) => setPlace({ ...place, image: file.url })}
+      />
+
+      {/* right column */}
+      <PlaceFormMap
+        place={place}
+        onChange={handleChange}
+        setCoordinates={setCoordinates}
+      />
     </Grid>
   )
 }
@@ -105,10 +94,13 @@ const PlaceForm = ({ isUpdate, propPlace }) => {
 PlaceForm.defaultProps = {
   isUpdate: false,
   propPlace: {
+    isPublished: false,
     name: 'name',
+    image: '',
     description: 'description',
-    coordinates: { lat: 46.48, lng: 30.72 }
+    coordinates: { lat: 46.48, lng: 30.72 },
   }
 }
+
 
 export default PlaceForm

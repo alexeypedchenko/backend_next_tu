@@ -10,13 +10,15 @@ const Index = () => {
   const [place, setPlace] = useState(null)
 
   useEffect(() => {
-    getDbDoc('places', id).then(setPlace)
-  }, [])
+    if (id) {
+      getDbDoc('places', id).then(setPlace)
+    }
+  }, [id])
 
   return (
     <div>
       <div className="page-head">
-        Place - {id}
+        <h1>Редактировать</h1>
         <Button variant="contained" onClick={() => router.push('/places')}>
           Назад
         </Button>

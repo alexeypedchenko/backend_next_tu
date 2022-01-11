@@ -256,8 +256,8 @@ export class GoogleMap {
   markerOnDragend(marker) {
     marker.addListener('dragend', () => {
       this.coordinates = {
-        lat: (marker.getPosition().lat()).toFixed(2),
-        lng: (marker.getPosition().lng()).toFixed(2),
+        lat: (marker.getPosition().lat()).toFixed(4),
+        lng: (marker.getPosition().lng()).toFixed(4),
       }
       if (this.onDragend && typeof this.onDragend === 'function') {
         this.onDragend(this.coordinates)

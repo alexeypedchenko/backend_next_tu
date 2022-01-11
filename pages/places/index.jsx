@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
+import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { getDbDocs, getDbDocsByOrder, deleteDbDoc } from '../../firebase/firebaseFirestore'
 import AlertDialog from '../../components/Dialog/Dialog'
@@ -28,6 +29,7 @@ const Index = () => {
   const deleteDoc = (id) => {
     deleteDbDoc('places', id).then((docId) => {
       setPlaces(places.filter((place) => place.id !== docId))
+      toast.warn("Place deleted")
     })
   }
 
@@ -60,8 +62,9 @@ const Index = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>Название - id</TableCell>
+                <TableCell align="right">Опубликовано</TableCell>
+                <TableCell align="right">Действия</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -75,6 +78,9 @@ const Index = () => {
                           {place.name} - {place.id}
                         </a>
                       </Link>
+                    </TableCell>
+                    <TableCell align="right">
+                      {place.isPublished ? 'Да' : 'Нет'}
                     </TableCell>
                     <TableCell align="right">
                       <Button

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './FileManager.module.css'
 import FileManagerForm from './FileManagerForm/FileManagerForm'
 import FileManagerModal from './FileManagerModal/FileManagerModal'
-import { getDbDocsByOrder } from './firebase/firestore'
+import { getDbDocsByOrder } from './firebase/firebase'
 
 const FileManager = ({ title, getSelected }) => {
   const modal = useRef()
@@ -65,7 +65,7 @@ const FileManager = ({ title, getSelected }) => {
           <div className={styles.body}>
             <div className={styles.actions}>
               <FileManagerModal
-                btnText="Добавить"
+                btnText="Добавить новое"
                 title="Добавить новый файл"
                 contentWidth={400} onClose={() => { }}
                 ref={modalForm}

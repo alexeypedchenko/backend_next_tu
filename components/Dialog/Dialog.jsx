@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 
-const AlertDialog = ({ btnText, title, description, ok, size, color }) => {
+const AlertDialog = ({ btnText, title, description, isLoading, ok, size, color }) => {
   const [open, setOpen] = useState(false)
 
   const handleClickOpen = () => setOpen(true)
@@ -14,7 +14,7 @@ const AlertDialog = ({ btnText, title, description, ok, size, color }) => {
 
   return (
     <>
-      <Button variant="contained" onClick={handleClickOpen} size={size} color={color}>
+      <Button disabled={isLoading} variant="contained" onClick={handleClickOpen} size={size} color={color}>
         {btnText}
       </Button>
 
@@ -46,9 +46,10 @@ AlertDialog.defaultProps = {
   btnText: 'Open alert dialog',
   title: 'Alert Dialog',
   description: '',
+  isLoading: false,
   ok: () => {},
   size: 'small',
-  color: 'primary'
+  color: 'primary',
 }
 
 export default AlertDialog

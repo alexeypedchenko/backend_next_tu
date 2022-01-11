@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import { GoogleMap } from '../../googleMap/googleMap'
 import styles from './Map.module.css'
 
@@ -7,7 +7,9 @@ const Map = ({ markers, setCoordinates }) => {
 
   useEffect(() => {
     const gmap = new GoogleMap('#map', {
-      onDragend: (coords) => setCoordinates(coords)
+      onDragend: (coords) => {
+        setCoordinates(coords)
+      }
     })
     gmap.init().then(() => setMap(gmap))
   }, [])
@@ -31,4 +33,11 @@ Map.defaultProps = {
   setCoordinates: (coords) => console.log(coords),
 }
 
-export default Map
+const areEqual = (prevProps, nextProps) => {
+  const prevCoords = prevProps.markers[0].coordinates
+  const nextCoords = nextProps.markers[0].coordinates
+  const reuslt = prevCoords === nextCoords
+  return reuslt
+}
+
+export default memo(Map, areEqual)

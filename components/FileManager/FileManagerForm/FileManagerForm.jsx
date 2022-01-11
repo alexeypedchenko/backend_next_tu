@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { uploadFile } from '../firebase/firestore'
+import { uploadFile } from '../firebase/firebase'
 import styles from './FileManagerForm.module.css'
 
 const FileManagerForm = ({ submitted, folders }) => {
@@ -9,7 +9,9 @@ const FileManagerForm = ({ submitted, folders }) => {
   const [folder, setFolder] = useState('')
 
   useEffect(() => {
-    setFolder(folders[0])
+    if (folders.length) {
+      setFolder(folders[0])
+    }
   }, [folders])
 
   const handeSubmit = () => {
