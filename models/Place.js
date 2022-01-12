@@ -1,3 +1,11 @@
+export const FILTERS = {
+  region: '',
+  tags: [
+    'tag 1',
+    'tag 2',
+  ],
+}
+
 export const PLACE = {
   type: 'place',
   isPublished: false,
@@ -11,14 +19,6 @@ export const PLACE = {
   filters: {
     ...FILTERS,
   }
-}
-
-export const FILTERS = {
-  region: '',
-  tags: [
-    'tag 1',
-    'tag 2',
-  ],
 }
 
 export const SEO = {

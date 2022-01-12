@@ -45,4 +45,6 @@ FileManagerModal.defaultProps = {
   contentWidth: 800,
 }
 
+FileManagerModal.displayName = 'FileManagerModal'
+
 export default FileManagerModal
