@@ -1,8 +1,8 @@
 export const FILTERS = {
-  region: '',
+  region: 'odessa',
   tags: [
-    'tag 1',
-    'tag 2',
+    'tag1',
+    'tag2',
   ],
 }
 
@@ -16,9 +16,7 @@ export const PLACE = {
   // link: 'place-name',
   // slug: 'place-name',
   // dbObjectId: '0001',
-  filters: {
-    ...FILTERS,
-  }
+  ...FILTERS,
 }
 
 export const SEO = {
