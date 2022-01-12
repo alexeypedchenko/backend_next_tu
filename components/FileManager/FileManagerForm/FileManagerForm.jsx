@@ -50,7 +50,7 @@ const FileManagerForm = ({ submitted, folders }) => {
           </div>
           /
           <div className={styles.formField}>
-            <p>Добавить</p>
+            <p>Добавить новую</p>
             <input type="text" value={folder} onChange={(event) => setFolder(event.target.value)} />
           </div>
         </div>

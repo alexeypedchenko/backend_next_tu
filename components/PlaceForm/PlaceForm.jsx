@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 import { addDbDoc, deleteDbDoc, updateDbDoc } from '../../firebase/firebaseFirestore'
 import { setChangeState } from '../../utils/setChangeState'
+import { PLACE } from '../../models/Place';
 
 import Grid from '@mui/material/Grid'
 import PlaceFormMap from './PlaceFormMap';
@@ -94,13 +95,8 @@ const PlaceForm = ({ isUpdate, propPlace }) => {
 PlaceForm.defaultProps = {
   isUpdate: false,
   propPlace: {
-    isPublished: false,
-    name: 'name',
-    image: '',
-    description: 'description',
-    coordinates: { lat: 46.48, lng: 30.72 },
+    ...PLACE,
   }
 }
-
 
 export default PlaceForm

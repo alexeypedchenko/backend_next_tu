@@ -24,9 +24,15 @@ const PlaceFormDescription = ({place, onChange, setImage}) => {
       />
       <FileManager
         title="Выбрать изображение"
-        getSelected={setImage}
+        onSelect={setImage}
       />
-      {place.image && (<img src={place.image} style={{ width: '100%' }} />)}
+      {place.image && (<img src={place.image} style={{
+        maxWidth: '100%',
+        width: 300,
+        height: 'auto',
+        display: 'block',
+        marginTop: 20,
+      }} />)}
     </Grid>
   )
 }

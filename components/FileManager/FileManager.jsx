@@ -4,7 +4,7 @@ import FileManagerForm from './FileManagerForm/FileManagerForm'
 import FileManagerModal from './FileManagerModal/FileManagerModal'
 import { getDbDocsByOrder } from './firebase/firebase'
 
-const FileManager = ({ title, getSelected }) => {
+const FileManager = ({ title, onSelect }) => {
   const modal = useRef()
   const modalForm = useRef()
   const [selected, setSelected] = useState(null)
@@ -43,7 +43,7 @@ const FileManager = ({ title, getSelected }) => {
   }
 
   const handleSelected = () => {
-    getSelected(selected)
+    onSelect(selected)
     setSelected(null)
     modal.current.closeModal()
   }
@@ -58,6 +58,7 @@ const FileManager = ({ title, getSelected }) => {
         <h2>{title}</h2>
 
         <FileManagerModal
+          btnText="Выбрать"
           ref={modal}
           title={selected ? `Выбран: ${selected.name} ` : 'Выберите элемент'}
           onClose={() => setSelected(null)}
@@ -124,7 +125,7 @@ const FileManager = ({ title, getSelected }) => {
 
 FileManager.defaultProps = {
   title: 'File Manager',
-  getSelected: () => { },
+  onSelect: () => { },
 }
 
 export default FileManager
