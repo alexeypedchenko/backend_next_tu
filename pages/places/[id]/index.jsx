@@ -8,10 +8,14 @@ const Index = () => {
   const router = useRouter()
   const { id } = router.query
   const [place, setPlace] = useState(null)
+  console.log('place:', place)
+  const [page, setPage] = useState(null)
+  console.log('page:', page)
 
   useEffect(() => {
     if (id) {
       getDbDoc('places', id).then(setPlace)
+      getDbDoc('pages', id).then(setPage)
     }
   }, [id])
 
@@ -23,7 +27,7 @@ const Index = () => {
           Назад
         </Button>
       </div>
-      {place && (<PlaceForm isUpdate propPlace={place} />)}
+      {place && page && (<PlaceForm isUpdate propPlace={place} propPage={page} />)}
     </div>
   )
 }

@@ -13,10 +13,12 @@
   pointer-events: none;
   z-index: 99;
   transition: 0.15s opacity;
+  display: none;
 }
 .opened {
   opacity: 1;
   pointer-events: all;
+  display: flex;
 }
 .content {
   background: #fff;

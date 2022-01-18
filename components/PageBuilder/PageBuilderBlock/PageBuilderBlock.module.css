@@ -1,0 +1,21 @@
+.block {
+  padding: 20px;
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 0 20px 0 rgba(#000, 0.5);
+  border-radius: 4px;
+}
+.blockDragging {
+  opacity: 0.5;
+  background: lime;
+}
+.blockDragging > * {
+  opacity: 0;
+}
+.title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

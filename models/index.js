@@ -6,6 +6,13 @@ export const FILTERS = {
   ],
 }
 
+export const SEO = {
+  title: 'seo title',
+  description: 'seo description',
+  keywords: 'seo keywords'
+}
+
+
 export const PLACE = {
   type: 'place',
   isPublished: false,
@@ -19,10 +26,9 @@ export const PLACE = {
   ...FILTERS,
 }
 
-export const SEO = {
-  title: 'seo title',
-  description: 'seo description',
-  keywords: 'seo keywords'
+export const PAGE = {
+  type: 'page',
+  blocks: [],
 }
 
 // export const getRouteScheme = () => ({

@@ -4,6 +4,7 @@ import {
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
   getDoc,
   getDocs,
@@ -28,6 +29,15 @@ export const addDbDoc = (collectionName, doc) => new Promise(async (res, rej) =>
     rej(e)
   }
 })
+export const setDbDoc = async (collectionName, docId, docData) => {
+  docData.createdAt = serverTimestamp()
+  docData.changedAt = serverTimestamp()
+  try {
+    await setDoc(doc(db, collectionName, docId), docData)
+  } catch (error) {
+    console.log('error:', error)
+  }
+}
 export const getDbDoc = (collectionName, docId) => new Promise(async (res, rej) => {
   const docRef = doc(db, collectionName, docId)
   const docSnap = await getDoc(docRef)
