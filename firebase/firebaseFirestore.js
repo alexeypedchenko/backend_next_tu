@@ -52,6 +52,7 @@ export const getDbDoc = (collectionName, docId) => new Promise(async (res, rej) 
 })
 export const updateDbDoc = (collectionName, docId, docData) => new Promise(async (res, rej) => {
   docData.changedAt = serverTimestamp()
+  delete docData.id
   const docRef = doc(db, collectionName, docId)
   try {
     const updateTimestamp = await updateDoc(docRef, docData)

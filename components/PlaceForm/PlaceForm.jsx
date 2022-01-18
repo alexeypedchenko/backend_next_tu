@@ -15,17 +15,11 @@ import PlaceFormDescription from './PlaceFormDescription';
 import PlaceFormHead from './PlaceFormHead';
 
 const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
-  console.log('propPage:', propPage)
-  console.log('propPlace:', propPlace)
   const router = useRouter()
   const [place, setPlace] = useState(propPlace)
   const [page, setPage] = useState(propPage)
   const [coordinates, setCoordinates] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-
-  const setBlocks = (blocks) => {
-    setPage({ ...page, blocks })
-  }
 
   const handleChange = (event) => setChangeState(event, place, setPlace)
 
@@ -39,46 +33,45 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
 
     if (isUpdate) {
       const id = place.id
-      const newPlace = { ...place }
-      delete newPlace.id
-
-      const newPage = { ...page }
-      delete newPage.id
-
       try {
-        updateDbDoc('places', id, newPlace).then(() => toast.success(`Place: ${place.name} updated`))
-        updateDbDoc('pages', id, newPage).then(() => toast.success(`Place: ${place.name} updated`))
+        await updateDbDoc('places', id, { ...place })
+        await updateDbDoc('pages', id, { ...page })
+        toast.success(`Place: ${place.name} updated`)
       } catch (error) {
         console.log('error:', error)
       } finally {
         setIsLoading(false)
+        return
       }
-      return
     }
 
-    addDbDoc('places', place).then((docId) => {
-      toast.success('Place created')
-      setDbDoc('pages', docId, PAGE).then((docId) => {
-        console.log('page created:', docId)
-      })
+    try {
+      const docId = await addDbDoc('places', place)
+      await setDbDoc('pages', docId, page)
+      toast.success('Place Created')
       router.push('/places')
-    }).finally(() => {
+    } catch (error) {
+      console.log('error:', error)
+    } finally {
       setIsLoading(false)
-    })
+    }
   }
 
-  const deleteDoc = () => {
+  const deleteDoc = async () => {
     setIsLoading(true)
-    deleteDbDoc('places', place.id).then((docId) => {
+    const id = place.id
+    try {
+      await deleteDbDoc('places', id)
+      await deleteDbDoc('pages', id)
       toast.warn(`Place: ${place.name} deleted`)
-      router.push('/places')
-    }).finally(() => {
+    } catch (error) {
+      console.log('error:', error)
+    } finally {
       setIsLoading(false)
-    })
+      router.push('/places')
+    }
   }
 
-  console.log('place:', place)
-  console.log('page:', page)
   if (!place || !page) {
     return (
       <p>load</p>
@@ -93,7 +86,6 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
         onChange={handleChange}
         setImage={(file) => setPlace({ ...place, image: file.url })}
       />
-
       {/* right column */}
       <PlaceFormMap
         place={place}
@@ -114,20 +106,16 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
         onSend={send}
       />
 
-      <Tabs
-        content={
-          [
-            {
-              title: 'Основное',
-              content: main,
-            },
-            {
-              title: 'Конструктор страницы',
-              content: (<PageBuilder blocks={page.blocks} setBlocks={setBlocks} />),
-            },
-          ]
-        }
-      />
+      <Tabs content={[
+        {
+          title: 'Основное',
+          content: main
+        },
+        {
+          title: 'Конструктор страницы',
+          content: (<PageBuilder blocks={page.blocks} setBlocks={(blocks) => setPage({ ...page, blocks })} />)
+        },
+      ]} />
     </div>
   )
 }

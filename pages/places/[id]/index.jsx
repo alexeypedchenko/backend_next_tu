@@ -8,9 +8,7 @@ const Index = () => {
   const router = useRouter()
   const { id } = router.query
   const [place, setPlace] = useState(null)
-  console.log('place:', place)
   const [page, setPage] = useState(null)
-  console.log('page:', page)
 
   useEffect(() => {
     if (id) {

@@ -26,11 +26,15 @@ const Index = () => {
     })
   }, [])
 
-  const deleteDoc = (id) => {
-    deleteDbDoc('places', id).then((docId) => {
+  const deleteDoc = async (id) => {
+    try {
+      const docId = await deleteDbDoc('places', id)
+      await deleteDbDoc('pages', id)
       setPlaces(places.filter((place) => place.id !== docId))
-      toast.warn("Place deleted")
-    })
+      toast.warn('Place deleted')
+    } catch (error) {
+      console.log('error:', error)
+    }
   }
 
   // for table
