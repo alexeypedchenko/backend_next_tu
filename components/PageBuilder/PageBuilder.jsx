@@ -8,35 +8,56 @@ const blockTypes = [
   {
     id: 0,
     type: 'text',
-    content: 'Lorem ipsum.',
+    content: {
+      title: '',
+      text: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae magni dolore doloremque consequatur veritatis commodi vel natus harum, dolorum maxime ad eligendi nisi itaque optio praesentium, quas voluptatum, laboriosam incidunt!`
+    },
+    active: true,
   },
   {
     id: 1,
     type: 'image',
-    content: 'https://via.placeholder.com/150x100/000000/FFFFFF/?text=img',
+    content: {
+      url: 'https://via.placeholder.com/150x100/000000/FFFFFF/?text=img',
+      name: 'image',
+    },
+    active: true,
   },
 ]
 
 const PageBuilder = ({ title, blocks, setBlocks }) => {
   const selectBlock = (block) => {
     const newBlock = {
+      ...block,
       id: new Date().getTime(),
-      type: block.type,
-      content: block.content,
     }
     setBlocks([...blocks, newBlock])
+  }
+
+  const setBlockContent = (id, field, data) => {
+    const index = blocks.findIndex((block) => block.id === id)
+    const block = blocks[index]
+    if (field !== 'active') {
+      blocks[index] = {
+        ...block,
+        content: {
+          ...block.content,
+          [field]: data,
+        }
+      }
+    } else {
+      blocks[index] = {
+        ...block,
+        active: data
+      }
+    }
+    setBlocks([...blocks])
   }
 
   const deleteBlock = (id) => {
     const agree = confirm('Вы точно хотите удалить этот блок?')
     if (!agree) return
     setBlocks([...blocks.filter((block) => block.id !== id)])
-  }
-
-  const setBlockContent = (id, content) => {
-    const index = blocks.findIndex((block) => block.id === id)
-    blocks[index] = { ...blocks[index], content }
-    setBlocks([...blocks])
   }
 
   const moveItems = (dragIndex, hoverIndex) => {

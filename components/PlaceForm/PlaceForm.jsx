@@ -95,6 +95,10 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
     </Grid>
   )
 
+  const pageBuilder = (
+    <PageBuilder blocks={page.blocks} setBlocks={(blocks) => setPage({ ...page, blocks })} />
+  )
+
   return (
     <div>
       <PlaceFormHead
@@ -107,15 +111,9 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
       />
 
       <Tabs content={[
-        {
-          title: 'Основное',
-          content: main
-        },
-        {
-          title: 'Конструктор страницы',
-          content: (<PageBuilder blocks={page.blocks} setBlocks={(blocks) => setPage({ ...page, blocks })} />)
-        },
-      ]} />
+        { title: 'Основное', content: main },
+        { title: 'Конструктор страницы', content: pageBuilder },
+      ]}/>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import styles from './PageBuilderBlock.module.css'
 import FileManager from '../../FileManager/FileManager'
 import { useDrag, useDrop } from 'react-dnd'
 
-const PageBuilderBlock = ({ id, block, index, onDelete, onChange, moveItems }) => {
+const PageBuilderBlock = ({ id, block, index, isCollapsed, onDelete, onChange, moveItems }) => {
   const ref = useRef(null)
   const [{ handlerId }, drop] = useDrop({
     accept: 'PageBuilderBlock',
@@ -45,22 +45,47 @@ const PageBuilderBlock = ({ id, block, index, onDelete, onChange, moveItems }) =
     >
       <h4 className={styles.title}>
         <span>Block type: {block.type}, позиция: {index}</span>
-        <button onClick={() => onDelete(id)}>Удалить</button>
+
+        <span>
+          <label style={{marginRight: 10}}>
+            Скрыть блок:
+            <input
+              checked={!block.active}
+              type="checkbox"
+              onChange={(event) => onChange(id, 'active', !event.target.checked)}
+            />
+          </label>
+          <button onClick={() => onDelete(id)}>Удалить</button>
+        </span>
       </h4>
 
-      <div>
+      <div className={styles.item}>
         {block.type === 'text' ? (
-          <textarea
-            style={{ width: 400, maxWidth: '100%' }}
-            rows="10"
-            value={block.content}
-            onChange={(event) => onChange(id, event.target.value)}
-          />
+          <>
+            <span>Заголовок:</span>
+            <input
+              type="text"
+              value={block.content.title}
+              onChange={(event) => onChange(id, 'title', event.target.value)}
+            />
+            <span>Описание:</span>
+            <textarea
+              rows="10"
+              value={block.content.text}
+              onChange={(event) => onChange(id, 'text', event.target.value)}
+            />
+          </>
         ) : block.type === 'image' ? (
-          <div>
-            <FileManager onSelect={(file) => onChange(id, file.url)} />
-            <img src={block.content} style={{ height: 200, maxWidth: '100%', marginTop: 10 }} />
-          </div>
+          <>
+            <FileManager onSelect={(file) => onChange(id, 'url', file.url)} />
+            <img src={block.content.url}/>
+            <span>Название изображения:</span>
+            <input
+              type="text"
+              value={block.content.name}
+              onChange={(event) => onChange(id, 'name', event.target.value)}
+            />
+          </>
         ) : (
           <p>other type</p>
         )}

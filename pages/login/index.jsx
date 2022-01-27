@@ -10,8 +10,8 @@ import TextField from '@mui/material/TextField'
 const Index = () => {
   const router = useRouter()
   const [fields, setFields] = useState({
-    email: 'admin@mail.com',
-    password: '123456'
+    email: '',
+    password: ''
   })
 
   const { isAuth } = useSelector(selectUser)
