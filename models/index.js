@@ -1,9 +1,6 @@
 export const FILTERS = {
   region: 'odessa',
-  tags: [
-    'tag1',
-    'tag2',
-  ],
+  tags: [],
 }
 
 export const SEO = {

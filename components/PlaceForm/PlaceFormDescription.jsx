@@ -8,6 +8,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Chip from '@mui/material/Chip';
+import Autocomplete from '@mui/material/Autocomplete';
+
+import { regions } from '../../models/other'
 
 const tags = [
   'tag 1',
@@ -20,6 +24,19 @@ const tags = [
 const PlaceFormDescription = ({ place, onChange, setImage }) => {
   return (
     <Grid item xs={12} sm={6}>
+      <FileManager
+        title="Выбрать изображение"
+        onSelect={setImage}
+      />
+      {place.image && (<img src={place.image} style={{
+        maxWidth: '100%',
+        width: 300,
+        height: 'auto',
+        display: 'block',
+        marginTop: 20,
+        marginBottom: 20,
+      }} />)}
+
       <TextField
         style={{ marginBottom: 20, width: '100%' }}
         label="Название"
@@ -46,30 +63,36 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
       />
 
       <FormControl sx={{ marginBottom: '20px', width: '100%' }}>
-        <InputLabel id="tags-label">Теги</InputLabel>
+        <InputLabel id="region-label">Регион</InputLabel>
         <Select
-          labelId="tags-label"
-          multiple
-          name="tags"
-          value={place.tags}
+          labelId="region-label"
+          name="region"
+          value={place.region}
           onChange={onChange}
-          input={<OutlinedInput label="Теги" />}
+          input={<OutlinedInput label="Регион" />}
         >
-          {tags.map((tag) => (<MenuItem key={tag} value={tag}>{tag}</MenuItem>))}
+          {regions.map((region) => (<MenuItem key={region} value={region}>{region}</MenuItem>))}
         </Select>
       </FormControl>
 
-      <FileManager
-        title="Выбрать изображение"
-        onSelect={setImage}
+      <Autocomplete
+        sx={{ marginBottom: '20px', width: '100%' }}
+        multiple
+        onChange={(_, value) => onChange({target: {value, name: 'tags'}})}
+        options={tags}
+        value={place.tags}
+        freeSolo
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (<Chip label={option} {...getTagProps({ index })} />))
+        }
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Теги"
+            placeholder="Тег"
+          />
+        )}
       />
-      {place.image && (<img src={place.image} style={{
-        maxWidth: '100%',
-        width: 300,
-        height: 'auto',
-        display: 'block',
-        marginTop: 20,
-      }} />)}
     </Grid>
   )
 }
