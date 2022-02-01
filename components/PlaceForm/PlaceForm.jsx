@@ -45,16 +45,16 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
       }
     }
 
-    try {
-      const docId = await addDbDoc('places', place)
-      await setDbDoc('pages', docId, page)
-      toast.success('Place Created')
-      router.push('/places')
-    } catch (error) {
-      console.log('error:', error)
-    } finally {
-      setIsLoading(false)
-    }
+    // try {
+    //   const docId = await addDbDoc('places', place)
+    //   await setDbDoc('pages', docId, page)
+    //   toast.success('Place Created')
+    //   router.push('/places')
+    // } catch (error) {
+    //   console.log('error:', error)
+    // } finally {
+    //   setIsLoading(false)
+    // }
   }
 
   const deleteDoc = async () => {

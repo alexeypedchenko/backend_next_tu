@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
-import { getDbDocs, getDbDocsByOrder, deleteDbDoc } from '../../firebase/firebaseFirestore'
-import AlertDialog from '../../components/Dialog/Dialog'
-import Button from '@mui/material/Button'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { getDbDocs, getDbDocsByOrder } from '../../firebase/firebaseFirestore'
+import Button from '@mui/material/Button'
+import PlaceCreate from '../../components/PlaceForm/PlaceCreate'
 
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -14,6 +13,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TablePagination from '@mui/material/TablePagination'
 import Paper from '@mui/material/Paper'
+import PlaceDelete from '../../components/PlaceForm/PlaceDelete'
 
 const Index = () => {
   const router = useRouter()
@@ -25,17 +25,6 @@ const Index = () => {
       setPlaces(docs)
     })
   }, [])
-
-  const deleteDoc = async (id) => {
-    try {
-      const docId = await deleteDbDoc('places', id)
-      await deleteDbDoc('pages', id)
-      setPlaces(places.filter((place) => place.id !== docId))
-      toast.warn('Place deleted')
-    } catch (error) {
-      console.log('error:', error)
-    }
-  }
 
   // for table
   const [page, setPage] = React.useState(0)
@@ -56,9 +45,7 @@ const Index = () => {
     <div>
       <div className="page-head">
         <h1>Places</h1>
-        <Button variant="contained" onClick={() => router.push('/places/create')}>
-          Создать новое место
-        </Button>
+        <PlaceCreate />
       </div>
 
       <Paper>
@@ -96,11 +83,9 @@ const Index = () => {
                       >
                         Изменить
                       </Button>
-                      <AlertDialog
-                        title={`Вы действительно хотите удалить ${place.name}?`}
-                        btnText="Удалить"
-                        color="error"
-                        ok={() => deleteDoc(place.id)}
+                      <PlaceDelete
+                        place={place}
+                        onDelete={() => setPlaces(places.filter((plc) => plc.id !== place.id))}
                       />
                     </TableCell>
                   </TableRow>

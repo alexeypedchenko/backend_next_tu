@@ -28,14 +28,13 @@ const AlertDialog = ({ btnText, title, description, isLoading, ok, size, color }
         {description && (
           <DialogContent>
             <DialogContentText>
-              Let Google help apps determine location. This means sending anonymous
-              location data to Google, even when no apps are running.
+              {description}
             </DialogContentText>
           </DialogContent>
         )}
         <DialogActions>
           <Button onClick={handleClose}>Отменить</Button>
-          <Button onClick={ok}>Подтвердить</Button>
+          <Button disabled={isLoading} onClick={ok}>Подтвердить</Button>
         </DialogActions>
       </Dialog>
     </>

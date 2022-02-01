@@ -1,5 +1,5 @@
 import React from 'react'
-import AlertDialog from '../Dialog/Dialog'
+import PlaceDelete from './PlaceDelete'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -24,14 +24,12 @@ const PlaceFormHead = ({ place, isLoading, isUpdate, onChange, onDelete, onSend 
       </Grid>
       <Grid item>
         {isUpdate && (<>
-          <AlertDialog
-            title={`Вы действительно хотите удалить ${place.name}?`}
-            btnText="Удалить"
-            color="error"
+          <PlaceDelete
+            place={place}
+            onDelete={onDelete}
             size="medium"
-            isLoading={isLoading}
-            ok={onDelete}
           />
+
           <div style={{ width: 15, display: 'inline-block' }}></div>
         </>)}
         <Button disabled={isLoading} color="success" variant="contained" onClick={onSend}>

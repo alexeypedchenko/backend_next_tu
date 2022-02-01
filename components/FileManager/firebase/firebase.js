@@ -11,6 +11,9 @@ import {
   collection,
   addDoc,
   getDocs,
+  getDoc,
+  updateDoc,
+  doc,
   query,
   orderBy,
   serverTimestamp,
@@ -58,17 +61,55 @@ export const getDbDocsByOrder = (desc = true) => new Promise(async (res, rej) =>
   }
 })
 
-export const uploadFile = (file, name, folder = '') => new Promise((res, rej) => {
-  const storagePath = folder ? `${folder}/${name}` : name
-  const storageRef = ref(storage, storagePath)
+export const uploadFile = (file, name, folder = '', docId = '') => new Promise(async (res, rej) => {
+  let storagePath = name
 
-  uploadBytes(storageRef, file).then((snapshot) => {
-    getDownloadURL(snapshot.ref).then((url) => {
-      const doc = { url, name, folder, storagePath }
-      addDbDoc(collectionName, doc).then((doc) => {
-        console.log('Uploaded successfully!')
-        res(doc)
-      })
-    })
-  })
+  if (docId && folder) {
+    storagePath = `${docId}/${folder}/${name}`
+  } else if (docId) {
+    storagePath = `${docId}/${name}`
+  }
+
+  const storageRef = ref(storage, storagePath)
+  const snapshot = await uploadBytes(storageRef, file)
+  const url = await getDownloadURL(snapshot.ref)
+  const doc = { url, name, folder, storagePath }
+
+  if (docId) {
+    const docData = await getDbDoc(docId)
+    docData.files.push(doc)
+    updateDbDoc(collectionName, docId, docData)
+    res(docData)
+    return
+  }
+
+  const docData = await addDbDoc(collectionName, doc)
+  console.log('Uploaded successfully!')
+  res(docData)
+})
+
+export const getDbDoc = (docId, collectionName = '_storage') => new Promise(async (res, rej) => {
+  const docRef = doc(db, collectionName, docId)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    res({ id: docId, ...docSnap.data() })
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!")
+    rej(null)
+  }
+})
+
+export const updateDbDoc = (collectionName, docId, docData) => new Promise(async (res, rej) => {
+  docData.changedAt = serverTimestamp()
+  delete docData.id
+  const docRef = doc(db, collectionName, docId)
+  try {
+    const updateTimestamp = await updateDoc(docRef, docData)
+    res(true)
+  } catch (error) {
+    console.log('error:', error)
+    rej(error)
+  }
 })

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { uploadFile } from '../firebase/firebase'
 import styles from './FileManagerForm.module.css'
 
-const FileManagerForm = ({ submitted, folders }) => {
+const FileManagerForm = ({ submitted, folders, docId }) => {
   const [load, setLoad] = useState(false)
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
@@ -16,7 +16,7 @@ const FileManagerForm = ({ submitted, folders }) => {
 
   const handeSubmit = () => {
     setLoad(true)
-    uploadFile(file, name, folder)
+    uploadFile(file, name, folder, docId)
       .then((doc) => submitted(doc))
       .finally(() => setLoad(false))
   }
@@ -66,6 +66,7 @@ const FileManagerForm = ({ submitted, folders }) => {
 
 FileManagerForm.defaultProps = {
   submitted: () => console.log('submitted'),
+  docId: '',
   folders: [],
 }
 

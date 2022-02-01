@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './FileManager.module.css'
 import FileManagerForm from './FileManagerForm/FileManagerForm'
 import FileManagerModal from './FileManagerModal/FileManagerModal'
-import { getDbDocsByOrder } from './firebase/firebase'
+import { getDbDocsByOrder, getDbDoc } from './firebase/firebase'
 
-const FileManager = ({ title, onSelect }) => {
+const FileManager = ({ title, onSelect, docId }) => {
   const modal = useRef()
   const modalForm = useRef()
   const [selected, setSelected] = useState(null)
@@ -14,6 +14,14 @@ const FileManager = ({ title, onSelect }) => {
   const [actioveFolder, setActioveFolder] = useState('')
 
   useEffect(() => {
+    if (docId) {
+      getDbDoc(docId).then((doc) => {
+        setItems(doc.files)
+        setFiltredItems(doc.files)
+      })
+      return
+    }
+
     getDbDocsByOrder().then((docs) => {
       setItems(docs)
       setFiltredItems(docs)
@@ -74,6 +82,7 @@ const FileManager = ({ title, onSelect }) => {
                 <FileManagerForm
                   submitted={fileSubmitted}
                   folders={folders}
+                  docId={docId}
                 />
               </FileManagerModal>
 
@@ -125,6 +134,7 @@ const FileManager = ({ title, onSelect }) => {
 
 FileManager.defaultProps = {
   title: 'File Manager',
+  docId: '',
   onSelect: () => { },
 }
 
