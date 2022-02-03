@@ -4,7 +4,7 @@ import {
   ref,
   deleteObject,
   listAll,
-
+  getDownloadURL,
 } from 'firebase/storage'
 
 initApp()
@@ -20,24 +20,22 @@ export const deleteFile = (filePath) => new Promise((res, rej) => {
     .catch((error) => rej(false))
 })
 
-export const listAllMod = (path = 'gngzkdjqe5qfrxpjvlw8/subfolder') => new Promise((res, rej) => {
-  const listRef = ref(storage, path);
-  console.log('listRef:', listRef)
-
-  // Find all the prefixes and items.
-  listAll(listRef)
+const getFolder = (ref) => new Promise(async (res, rej) => {
+  listAll(ref)
     .then((res) => {
-      console.log('res:', res)
-      res.prefixes.forEach((folderRef) => {
-        console.log('folderRef:', folderRef)
-        // All the prefixes under listRef.
-        // You may call listAll() recursively on them.
-      });
+      res.prefixes.forEach((folderRef) => getFolder(folderRef))
       res.items.forEach((itemRef) => {
-        console.log('itemRef:', itemRef)
-        // All the items under listRef.
-      });
-    }).catch((error) => {
-      // Uh-oh, an error occurred!
-    });
+        deleteObject(itemRef)
+        .then(() => console.log('File deleted successfully:', itemRef.name))
+        .catch((error) => console.log('error:', error));
+      })
+    })
+    .catch((error) => console.log('error:', error));
+})
+
+export const deleteStorageItems = (docId = false) => new Promise(async (res, rej) => {
+  if (!docId) return
+
+  const listRef = ref(storage, `/${docId}`)
+  getFolder(listRef)
 })

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify'
 import { deleteDbDoc } from '../../firebase/firebaseFirestore'
-import { deleteFile } from '../../firebase/firebaseStorage';
 import AlertDialog from '../Dialog/Dialog'
+import { deleteStorageItems } from '../../firebase/firebaseStorage'
 
 const PlaceDelete = ({ place, onDelete, ...props }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -15,7 +15,7 @@ const PlaceDelete = ({ place, onDelete, ...props }) => {
       await deleteDbDoc('places', id)
       await deleteDbDoc('pages', id)
       await deleteDbDoc('_storage', id)
-      await deleteFile(id)
+      deleteStorageItems(id)
       onDelete()
       toast.warn('Place was deleted')
     } catch (error) {
