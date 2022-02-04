@@ -31,3 +31,11 @@
 .formRow .formField {
   width: calc(50% - 10px);
 }
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.formActions button:not(:last-child) {
+  margin-right: 10px;
+}

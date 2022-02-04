@@ -3,7 +3,7 @@ import styles from './PageBuilderBlock.module.css'
 import FileManager from '../../FileManager/FileManager'
 import { useDrag, useDrop } from 'react-dnd'
 
-const PageBuilderBlock = ({ id, block, index, isCollapsed, onDelete, onChange, moveItems }) => {
+const PageBuilderBlock = ({ id, block, index, storage, isCollapsed, onDelete, onChange, moveItems }) => {
   const ref = useRef(null)
   const [{ handlerId }, drop] = useDrop({
     accept: 'PageBuilderBlock',
@@ -77,7 +77,10 @@ const PageBuilderBlock = ({ id, block, index, isCollapsed, onDelete, onChange, m
           </>
         ) : block.type === 'image' ? (
           <>
-            <FileManager onSelect={(file) => onChange(id, 'url', file.url)} />
+            <FileManager
+              folder={storage}
+              onSelect={(file) => onChange(id, 'url', file.url)}
+            />
             <img src={block.content.url}/>
             <span>Название изображения:</span>
             <input

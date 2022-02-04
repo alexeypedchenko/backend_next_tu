@@ -96,7 +96,11 @@ const PlaceForm = ({ isUpdate, propPlace, propPage }) => {
   )
 
   const pageBuilder = (
-    <PageBuilder blocks={page.blocks} setBlocks={(blocks) => setPage({ ...page, blocks })} />
+    <PageBuilder
+      blocks={page.blocks}
+      setBlocks={(blocks) => setPage({ ...page, blocks })}
+      storage={place.id}
+    />
   )
 
   return (

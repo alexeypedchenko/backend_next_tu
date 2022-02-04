@@ -25,7 +25,7 @@ const blockTypes = [
   },
 ]
 
-const PageBuilder = ({ title, blocks, setBlocks }) => {
+const PageBuilder = ({ title, blocks, storage, setBlocks }) => {
   const selectBlock = (block) => {
     const newBlock = {
       ...block,
@@ -76,6 +76,7 @@ const PageBuilder = ({ title, blocks, setBlocks }) => {
             key={block.id}
             id={block.id}
             block={block}
+            storage={storage}
             onDelete={deleteBlock}
             onChange={setBlockContent}
             moveItems={moveItems}

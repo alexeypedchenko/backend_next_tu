@@ -26,7 +26,7 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
     <Grid item xs={12} sm={6}>
       <FileManager
         title="Выбрать изображение"
-        docId={place.id}
+        folder={place.id}
         onSelect={setImage}
       />
       {place.image && (<img src={place.image} style={{

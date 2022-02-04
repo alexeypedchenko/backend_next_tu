@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { uploadFile } from '../firebase/firebase'
 import styles from './FileManagerForm.module.css'
 
-const FileManagerForm = ({ submitted, folders, docId }) => {
+const FileManagerForm = ({ submitted, folder }) => {
+  const fileInput = useRef(null)
   const [load, setLoad] = useState(false)
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
-  const [folder, setFolder] = useState('')
-
-  useEffect(() => {
-    if (folders.length) {
-      setFolder(folders[0])
-    }
-  }, [folders])
 
   const handeSubmit = () => {
     setLoad(true)
-    uploadFile(file, name, folder, docId)
-      .then((doc) => submitted(doc))
+    uploadFile(file, name, folder)
+      .then((doc) => {
+        submitted(doc)
+        clearInputs()
+      })
       .finally(() => setLoad(false))
   }
 
@@ -29,45 +26,38 @@ const FileManagerForm = ({ submitted, folders, docId }) => {
     setName(localFile.name)
   }
 
+  const clearInputs = () => {
+    setName('')
+    setFile(null)
+    fileInput.current.value = null
+  }
+
   return (
     <div className={styles.form}>
       <div className={styles.formField}>
         <p>Выберите файл</p>
-        <input type="file" onChange={onFileChange} />
+        <input ref={fileInput} type="file" onChange={onFileChange} />
       </div>
       <div className={styles.formField}>
         <p>Введите название файла</p>
         <input type="text" value={name} onChange={(event) => setName(event.target.value)} />
       </div>
-      <div className={styles.formField}>
-        <p>Выберите или добавьте папку</p>
-        <div className={styles.formRow}>
-          <div className={styles.formField}>
-            <p>Выбрать</p>
-            <select onChange={(event) => setFolder(event.target.value)}>
-              {folders.map((folder) => (<option key={folder} value={folder}>{folder}</option>))}
-            </select>
-          </div>
-          /
-          <div className={styles.formField}>
-            <p>Добавить новую</p>
-            <input type="text" value={folder} onChange={(event) => setFolder(event.target.value)} />
-          </div>
+
+      {load && (<p>Загрузка...</p>)}
+
+      {file && !load && (
+        <div className={styles.formActions}>
+          <button disabled={load} onClick={clearInputs}>Очистить</button>
+          <button disabled={load} onClick={handeSubmit}>Добавить</button>
         </div>
-      </div>
-      <div className={styles.formField}>
-        <button disabled={!file || load} onClick={handeSubmit}>
-          {load ? 'Загрузка...' : 'Добавить'}
-        </button>
-      </div>
+      )}
     </div>
   )
 }
 
 FileManagerForm.defaultProps = {
   submitted: () => console.log('submitted'),
-  docId: '',
-  folders: [],
+  folder: '',
 }
 
 export default FileManagerForm

@@ -61,24 +61,22 @@ export const getDbDocsByOrder = (desc = true) => new Promise(async (res, rej) =>
   }
 })
 
-export const uploadFile = (file, name, folder = '', docId = '') => new Promise(async (res, rej) => {
+export const uploadFile = (file, name, folder = '') => new Promise(async (res, rej) => {
   let storagePath = name
 
-  if (docId && folder) {
-    storagePath = `${docId}/${folder}/${name}`
-  } else if (docId) {
-    storagePath = `${docId}/${name}`
+  if (folder) {
+    storagePath = `${folder}/${name}`
   }
 
   const storageRef = ref(storage, storagePath)
   const snapshot = await uploadBytes(storageRef, file)
   const url = await getDownloadURL(snapshot.ref)
-  const doc = { url, name, folder, storagePath }
+  const doc = { url, name, storagePath }
 
-  if (docId) {
-    const docData = await getDbDoc(docId)
+  if (folder) {
+    const docData = await getDbDoc(folder)
     docData.files.push(doc)
-    updateDbDoc(collectionName, docId, docData)
+    updateDbDoc(collectionName, folder, docData)
     res(docData)
     return
   }

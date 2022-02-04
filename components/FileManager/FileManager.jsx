@@ -2,45 +2,19 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './FileManager.module.css'
 import FileManagerForm from './FileManagerForm/FileManagerForm'
 import FileManagerModal from './FileManagerModal/FileManagerModal'
-import { getDbDocsByOrder, getDbDoc } from './firebase/firebase'
+import { getDbDoc } from './firebase/firebase'
 
-const FileManager = ({ title, onSelect, docId }) => {
+const FileManager = ({ title, onSelect, folder }) => {
   const modal = useRef()
   const modalForm = useRef()
   const [selected, setSelected] = useState(null)
   const [items, setItems] = useState([])
-  const [filtredItems, setFiltredItems] = useState([])
-  const [folders, setFolders] = useState([])
-  const [actioveFolder, setActioveFolder] = useState('')
 
   useEffect(() => {
-    if (docId) {
-      getDbDoc(docId).then((doc) => {
-        setItems(doc.files)
-        setFiltredItems(doc.files)
-      })
-      return
-    }
-
-    getDbDocsByOrder().then((docs) => {
-      setItems(docs)
-      setFiltredItems(docs)
+    getDbDoc(folder).then((doc) => {
+      setItems(doc.files)
     })
   }, [])
-
-  useEffect(() => {
-    const folders = Array.from(new Set(items.map((item) => item.folder)))
-    setFolders(folders)
-    setFiltredItems(items)
-  }, [items])
-
-  useEffect(() => {
-    setFiltredItems(
-      actioveFolder
-        ? items.filter((item) => item.folder === actioveFolder)
-        : items
-    )
-  }, [actioveFolder, items])
 
   const selectItem = (idx) => {
     if (selected !== idx) {
@@ -56,7 +30,7 @@ const FileManager = ({ title, onSelect, docId }) => {
     modal.current.closeModal()
   }
   const fileSubmitted = (doc) => {
-    setItems([doc, ...items])
+    setItems(doc.files)
     modalForm.current.closeModal()
   }
 
@@ -81,8 +55,7 @@ const FileManager = ({ title, onSelect, docId }) => {
               >
                 <FileManagerForm
                   submitted={fileSubmitted}
-                  folders={folders}
-                  docId={docId}
+                  folder={folder}
                 />
               </FileManagerModal>
 
@@ -94,30 +67,10 @@ const FileManager = ({ title, onSelect, docId }) => {
               </button>
             </div>
 
-            {folders.length > 1 && (
-              <div className={styles.folders}>
-                {folders.map((folder) => (
-                  <div
-                    key={folder}
-                    className={`${styles.folder} ${actioveFolder === folder ? styles.folderSelected : ''}`}
-                    onClick={() => {
-                      if (actioveFolder === folder) {
-                        setActioveFolder(null)
-                      } else {
-                        setActioveFolder(folder)
-                      }
-                    }}
-                  >
-                    {folder}
-                  </div>
-                ))}
-              </div>
-            )}
-
             <div className={styles.list}>
-              {filtredItems.map((item) => (
+              {items.map((item, index) => (
                 <div
-                  key={item.id}
+                  key={index}
                   className={`${styles.item} ${selected === item ? styles.itemSelected : ''}`}
                   onClick={() => selectItem(item)}
                 >
@@ -134,7 +87,7 @@ const FileManager = ({ title, onSelect, docId }) => {
 
 FileManager.defaultProps = {
   title: 'File Manager',
-  docId: '',
+  folder: '_common',
   onSelect: () => { },
 }
 
