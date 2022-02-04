@@ -84,7 +84,7 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
         value={place.tags}
         freeSolo
         renderTags={(value, getTagProps) =>
-          value.map((option, index) => (<Chip label={option} {...getTagProps({ index })} />))
+          value.map((option, index) => (<Chip key={index} label={option} {...getTagProps({ index })} />))
         }
         renderInput={(params) => (
           <TextField
