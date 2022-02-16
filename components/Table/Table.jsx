@@ -9,8 +9,7 @@ import TableRow from '@mui/material/TableRow'
 import TablePagination from '@mui/material/TablePagination'
 import Paper from '@mui/material/Paper'
 
-const myTable = ({ length, children, head, setStart, setEnd }) => {
-
+const MyTable = ({ length, children, head, setStart, setEnd }) => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const handleChangePage = (event, newPage) => {
@@ -33,7 +32,7 @@ const myTable = ({ length, children, head, setStart, setEnd }) => {
           <TableHead>
             <TableRow>
               {head.map((title, idx) => (
-                <TableCell align={idx > 0 ? 'right' : 'left'}>
+                <TableCell key={idx} align={idx > 0 ? 'right' : 'left'}>
                   {title}
                 </TableCell>
               ))}
@@ -57,10 +56,10 @@ const myTable = ({ length, children, head, setStart, setEnd }) => {
   )
 }
 
-myTable.defaultProps = {
+MyTable.defaultProps = {
   length: 0,
   list: [],
   head: [],
 }
 
-export default myTable
+export default MyTable

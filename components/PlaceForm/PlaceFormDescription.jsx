@@ -78,7 +78,7 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
           onChange={onChange}
         >
           {tags.map((tag) => (
-            <MenuItem value={tag}>{tag}</MenuItem>
+            <MenuItem key={tag} value={tag}>{tag}</MenuItem>
           ))}
         </Select>
       </FormControl>
