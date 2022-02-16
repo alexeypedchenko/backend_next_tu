@@ -2,22 +2,28 @@ import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getDbDocsByOrder } from '../../firebase/firebaseFirestore'
-import PlaceCreate from '../../components/PlaceForm/PlaceCreate'
-import PlaceDelete from '../../components/PlaceForm/PlaceDelete'
-import Table from '../../components/Table/Table'
+import RouteCreate from '../../components/RouteForm/RouteCreate'
+import RouteDelete from '../../components/RouteForm/RouteDelete'
 
 import Button from '@mui/material/Button'
+import Table from '../../components/Table/Table'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
+
 import { Context } from '../../components/Layouts/DefaultLayout'
 
 const Index = () => {
   const router = useRouter()
+
+  const [routes, setRoutes] = useState([])
   const { places, setPlaces } = useContext(Context)
+
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(0)
 
   useEffect(() => {
+    getDbDocsByOrder('routes', 'createdAt')
+      .then(setRoutes)
     getDbDocsByOrder('places', 'createdAt')
       .then(setPlaces)
   }, [])
@@ -25,29 +31,29 @@ const Index = () => {
   return (
     <div>
       <div className="page-head">
-        <h1>Places</h1>
-        <PlaceCreate />
+        <h1>Маршруты</h1>
+        <RouteCreate />
       </div>
 
       <Table
-        length={places.length}
+        length={routes.length}
         head={['Название', 'Опубликовано', 'Действия']}
         setStart={setStart}
         setEnd={setEnd}
       >
-        {places
+        {routes
           .slice(start, end)
-          .map((place) => (
-            <TableRow key={place.id}>
+          .map((route) => (
+            <TableRow key={route.id}>
               <TableCell component="th" scope="row">
-                <Link href={`/places/${place.id}`}>
+                <Link href={`/routes/${route.id}`}>
                   <a>
-                    {place.name} - {place.id}
+                    {route.name} - {route.id}
                   </a>
                 </Link>
               </TableCell>
               <TableCell align="right">
-                {place.isPublished ? 'Да' : 'Нет'}
+                {route.isPublished ? 'Да' : 'Нет'}
               </TableCell>
               <TableCell align="right">
                 <Button
@@ -55,13 +61,13 @@ const Index = () => {
                   variant="contained"
                   size="small"
                   color="info"
-                  onClick={() => router.push(`/places/${place.id}`)}
+                  onClick={() => router.push(`/routes/${route.id}`)}
                 >
                   Изменить
                 </Button>
-                <PlaceDelete
-                  place={place}
-                  onDelete={() => setPlaces(places.filter((plc) => plc.id !== place.id))}
+                <RouteDelete
+                  route={route}
+                  onDelete={() => setRoutes(routes.filter((rt) => rt.id !== route.id))}
                 />
               </TableCell>
             </TableRow>

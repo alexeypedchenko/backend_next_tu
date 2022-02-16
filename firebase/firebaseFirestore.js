@@ -18,8 +18,8 @@ const db = getFirestore()
 
 export const addDbDoc = (collectionName, doc) => new Promise(async (res, rej) => {
   // serverTimestamp
-  doc.createdAt = serverTimestamp()
-  doc.changedAt = serverTimestamp()
+  doc.createdAt = new Date().toLocaleString('uk-Ua')
+  doc.changedAt = new Date().toLocaleString('uk-Ua')
   try {
     const docRef = await addDoc(collection(db, collectionName), doc)
     console.log("Document written with ID: ", docRef.id)
@@ -30,8 +30,8 @@ export const addDbDoc = (collectionName, doc) => new Promise(async (res, rej) =>
   }
 })
 export const setDbDoc = async (collectionName, docId, docData) => {
-  docData.createdAt = serverTimestamp()
-  docData.changedAt = serverTimestamp()
+  docData.createdAt = new Date().toLocaleString('uk-Ua')
+  docData.changedAt = new Date().toLocaleString('uk-Ua')
   try {
     await setDoc(doc(db, collectionName, docId), docData)
   } catch (error) {
@@ -51,8 +51,8 @@ export const getDbDoc = (collectionName, docId) => new Promise(async (res, rej) 
   }
 })
 export const updateDbDoc = (collectionName, docId, docData) => new Promise(async (res, rej) => {
-  docData.changedAt = serverTimestamp()
-  delete docData.id
+  docData.changedAt = new Date().toLocaleString('uk-Ua')
+  // delete docData.id
   const docRef = doc(db, collectionName, docId)
   try {
     const updateTimestamp = await updateDoc(docRef, docData)

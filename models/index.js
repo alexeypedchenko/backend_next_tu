@@ -1,5 +1,5 @@
 export const FILTERS = {
-  region: 'odessa',
+  region: '',
   tags: [],
 }
 
@@ -9,17 +9,25 @@ export const SEO = {
   keywords: 'seo keywords'
 }
 
-
 export const PLACE = {
   type: 'place',
+  // slug: 'place-name',
   isPublished: false,
-  name: 'name',
+  name: 'new place',
   description: 'description',
   image: 'https://via.placeholder.com/120x80?text=img-place',
   coordinates: { lat: 46.48, lng: 30.72 },
-  // link: 'place-name',
-  // slug: 'place-name',
-  // dbObjectId: '0001',
+  ...FILTERS,
+}
+
+export const ROUTE = {
+  type: 'route',
+  // slug: 'route-name',
+  isPublished: false,
+  name: 'new route',
+  description: 'description',
+  image: 'https://via.placeholder.com/120x80?text=img-route',
+  places: [],
   ...FILTERS,
 }
 

@@ -8,18 +8,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
-import Autocomplete from '@mui/material/Autocomplete';
 
-import { regions } from '../../models/other'
-
-const tags = [
-  'tag 1',
-  'tag 2',
-  'tag 3',
-  'tag 4',
-  'tag 5',
-]
+import { regions, tags } from '../../models/other'
 
 const PlaceFormDescription = ({ place, onChange, setImage }) => {
   return (
@@ -76,24 +66,22 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
         </Select>
       </FormControl>
 
-      <Autocomplete
-        sx={{ marginBottom: '20px', width: '100%' }}
-        multiple
-        onChange={(_, value) => onChange({target: {value, name: 'tags'}})}
-        options={tags}
-        value={place.tags}
-        freeSolo
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (<Chip key={index} label={option} {...getTagProps({ index })} />))
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Теги"
-            placeholder="Тег"
-          />
-        )}
-      />
+      <FormControl fullWidth>
+        <InputLabel id="selectTag">Теги</InputLabel>
+        <Select
+          labelId="selectTag"
+          id="demo-simple-select"
+          value={place.tags}
+          label="Теги"
+          name="tags"
+          multiple
+          onChange={onChange}
+        >
+          {tags.map((tag) => (
+            <MenuItem value={tag}>{tag}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Grid>
   )
 }

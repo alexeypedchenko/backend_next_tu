@@ -1,12 +1,12 @@
 import React from 'react'
-import PlaceDelete from './PlaceDelete'
+import RouteDelete from './RouteDelete'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 
-const PlaceFormHead = ({ place, isLoading, onChange, onDelete, onSend }) => {
+const RouteFormHead = ({ route, isLoading, onChange, onDelete, onSend }) => {
   return (
     <Grid container justifyContent="space-between" spacing={2} sx={{marginBottom: 1}}>
       <Grid item>
@@ -14,7 +14,7 @@ const PlaceFormHead = ({ place, isLoading, onChange, onDelete, onSend }) => {
           control={
             <Switch
               name="isPublished"
-              checked={place.isPublished}
+              checked={route.isPublished}
               onChange={onChange}
               color="success"
             />
@@ -23,8 +23,8 @@ const PlaceFormHead = ({ place, isLoading, onChange, onDelete, onSend }) => {
         />
       </Grid>
       <Grid item>
-        <PlaceDelete
-          place={place}
+        <RouteDelete
+          route={route}
           onDelete={onDelete}
           size="medium"
         />
@@ -38,4 +38,4 @@ const PlaceFormHead = ({ place, isLoading, onChange, onDelete, onSend }) => {
   )
 }
 
-export default PlaceFormHead
+export default RouteFormHead

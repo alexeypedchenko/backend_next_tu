@@ -4,37 +4,37 @@ import { useRouter } from 'next/router'
 
 import { addDbDoc, deleteDbDoc, updateDbDoc, setDbDoc } from '../../firebase/firebaseFirestore'
 import { setChangeState } from '../../utils/setChangeState'
-import { PLACE, PAGE } from '../../models';
+import { ROUTE, PAGE } from '../../models';
 
 import Tabs from '../Tabs/Tabs';
 import PageBuilder from '../PageBuilder/PageBuilder'
 
+// import PlaceFormMap from './PlaceFormMap';
+// import PlaceFormDescription from './PlaceFormDescription';
+import RouteFormHead from './RouteFormHead';
 import Grid from '@mui/material/Grid'
-import PlaceFormMap from './PlaceFormMap';
-import PlaceFormDescription from './PlaceFormDescription';
-import PlaceFormHead from './PlaceFormHead';
 
-const PlaceForm = ({ propPlace, propPage }) => {
+const PlaceForm = ({ propRoute, propPage }) => {
   const router = useRouter()
-  const [place, setPlace] = useState(propPlace)
+  const [route, setRoute] = useState(propRoute)
   const [page, setPage] = useState(propPage)
   const [coordinates, setCoordinates] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleChange = (event) => setChangeState(event, place, setPlace)
+  const handleChange = (event) => setChangeState(event, route, setRoute)
 
   useEffect(() => {
     if (!coordinates) return
-    setPlace({ ...place, coordinates })
+    setRoute({ ...route, coordinates })
   }, [coordinates])
 
   const send = async () => {
     setIsLoading(true)
-    const id = place.id
+    const id = route.id
     try {
-      await updateDbDoc('places', id, { ...place })
+      await updateDbDoc('routes', id, { ...route })
       await updateDbDoc('pages', id, { ...page })
-      toast.success(`Place: ${place.name} updated`)
+      toast.success(`Route: ${route.name} updated`)
     } catch (error) {
       console.log('error:', error)
     } finally {
@@ -43,44 +43,31 @@ const PlaceForm = ({ propPlace, propPage }) => {
     }
   }
 
-  if (!place || !page) {
+  if (!route || !page) {
     return (
       <p>load</p>
     )
   }
 
   const main = (
-    <Grid container spacing={4}>
-      {/* left column */}
-      <PlaceFormDescription
-        place={place}
-        onChange={handleChange}
-        setImage={(file) => setPlace({ ...place, image: file.url })}
-      />
-      {/* right column */}
-      <PlaceFormMap
-        place={place}
-        onChange={handleChange}
-        setCoordinates={setCoordinates}
-      />
-    </Grid>
+    <div>main</div>
   )
 
   const pageBuilder = (
     <PageBuilder
       blocks={page.blocks}
       setBlocks={(blocks) => setPage({ ...page, blocks })}
-      storage={place.id}
+      storage={route.id}
     />
   )
 
   return (
     <div>
-      <PlaceFormHead
-        place={place}
+      <RouteFormHead
+        route={route}
         isLoading={isLoading}
         onChange={handleChange}
-        onDelete={() => router.push('/places')}
+        onDelete={() => router.push('/routes')}
         onSend={send}
       />
 
@@ -93,8 +80,8 @@ const PlaceForm = ({ propPlace, propPage }) => {
 }
 
 PlaceForm.defaultProps = {
-  propPlace: {
-    ...PLACE,
+  propRoute: {
+    ...ROUTE,
   },
   propPage: {
     ...PAGE,

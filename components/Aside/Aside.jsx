@@ -12,10 +12,12 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import HomeIcon from '@mui/icons-material/Home';
 import CastleIcon from '@mui/icons-material/Castle';
+import RouteIcon from '@mui/icons-material/Route';
 
 const links = [
   { name: 'Home', path: '/', icon: HomeIcon },
   { name: 'Places', path: '/places', icon: CastleIcon },
+  { name: 'Routes', path: '/routes', icon: RouteIcon },
 ]
 
 const Aside = () => {

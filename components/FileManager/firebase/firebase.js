@@ -27,7 +27,7 @@ const collectionName = '_storage'
 
 export const addDbDoc = (collectionName, doc) => new Promise(async (res, rej) => {
   // serverTimestamp
-  doc.createdAt = serverTimestamp()
+  doc.createdAt = new Date().toLocaleString('uk-Ua')
   try {
     const docRef = await addDoc(collection(db, collectionName), doc)
     doc.createdAt = new Date()
@@ -100,7 +100,7 @@ export const getDbDoc = (docId, collectionName = '_storage') => new Promise(asyn
 })
 
 export const updateDbDoc = (collectionName, docId, docData) => new Promise(async (res, rej) => {
-  docData.changedAt = serverTimestamp()
+  docData.changedAt = new Date().toLocaleString('uk-Ua')
   delete docData.id
   const docRef = doc(db, collectionName, docId)
   try {

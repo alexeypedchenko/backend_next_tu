@@ -1,20 +1,36 @@
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useAuthWatcher } from '../../hooks/useAuthWatcher'
 import { selectUser } from '../../store/reducers/user/userReducer'
 import Aside from '../Aside/Aside'
 import Header from '../Header/Header'
 
+import { getDbDocsByOrder } from '../../firebase/firebaseFirestore'
+
+export const Context = createContext({})
+
 const Layout = ({ children }) => {
   const router = useRouter()
   const authWatcher = useAuthWatcher()
   const { isAuth } = useSelector(selectUser)
 
+  // for context
+  const [places, setPlaces] = useState([])
+
   useEffect(() => {
     if (!isAuth) {
       router.push('/login')
     }
+  }, [isAuth])
+
+  useEffect(() => {
+    if (!isAuth) {
+      return
+    }
+
+    getDbDocsByOrder('places', 'createdAt')
+      .then(setPlaces)
   }, [isAuth])
 
   if (!isAuth) return (
@@ -24,7 +40,7 @@ const Layout = ({ children }) => {
   )
 
   return (
-    <>
+    <Context.Provider value={{places, setPlaces}}>
       <Header />
       <div style={{
         display: 'flex',
@@ -39,7 +55,7 @@ const Layout = ({ children }) => {
           {children}
         </main>
       </div>
-    </>
+    </Context.Provider>
   )
 }
 
