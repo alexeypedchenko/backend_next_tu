@@ -3,8 +3,8 @@ import { createContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useAuthWatcher } from '../../hooks/useAuthWatcher'
 import { selectUser } from '../../store/reducers/user/userReducer'
-import Aside from '../Aside/Aside'
-import Header from '../Header/Header'
+import Aside from './Aside'
+import Header from './Header'
 
 import { getDbDocsByOrder } from '../../firebase/firebaseFirestore'
 

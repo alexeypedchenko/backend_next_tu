@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux'
-import EmptyLayout from '../../components/Layouts/EmptyLayout'
+import EmptyLayout from '../../components/Layout/EmptyLayout'
 import { selectUser } from '../../store/reducers/user/userReducer'
 import { signin } from '../../firebase/firebaseAuth'
 import Button from '@mui/material/Button'

@@ -1,12 +1,15 @@
 import React from 'react'
-import RouteDelete from './RouteDelete'
+import { useRouter } from 'next/router'
+import ItemDelete from './ItemDelete'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 
-const RouteFormHead = ({ route, isLoading, onChange, onDelete, onSend }) => {
+const FormHead = ({ object, isLoading, collection, onChange, onSend }) => {
+  const router = useRouter()
+
   return (
     <Grid container justifyContent="space-between" spacing={2} sx={{marginBottom: 1}}>
       <Grid item>
@@ -14,7 +17,7 @@ const RouteFormHead = ({ route, isLoading, onChange, onDelete, onSend }) => {
           control={
             <Switch
               name="isPublished"
-              checked={route.isPublished}
+              checked={object.isPublished}
               onChange={onChange}
               color="success"
             />
@@ -23,9 +26,10 @@ const RouteFormHead = ({ route, isLoading, onChange, onDelete, onSend }) => {
         />
       </Grid>
       <Grid item>
-        <RouteDelete
-          route={route}
-          onDelete={onDelete}
+        <ItemDelete
+          id={object.id}
+          collection={collection}
+          onDelete={() => router.push(`/${collection}`)}
           size="medium"
         />
 
@@ -38,4 +42,4 @@ const RouteFormHead = ({ route, isLoading, onChange, onDelete, onSend }) => {
   )
 }
 
-export default RouteFormHead
+export default FormHead

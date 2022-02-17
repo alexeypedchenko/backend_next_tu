@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router'
 
-import { addDbDoc, deleteDbDoc, updateDbDoc, setDbDoc } from '../../firebase/firebaseFirestore'
+import { updateDbDoc } from '../../firebase/firebaseFirestore'
 import { setChangeState } from '../../utils/setChangeState'
 import { PLACE, PAGE } from '../../models';
 
@@ -11,12 +10,13 @@ import PageBuilder from '../PageBuilder/PageBuilder'
 
 import Grid from '@mui/material/Grid'
 import PlaceFormMap from './PlaceFormMap';
-import PlaceFormDescription from './PlaceFormDescription';
-import PlaceFormHead from './PlaceFormHead';
 
-const PlaceForm = ({ propPlace, propPage }) => {
-  const router = useRouter()
-  const [place, setPlace] = useState(propPlace)
+import FormDescription from '../FormBlocks/FormDescription'
+import FormHead from '../FormBlocks/FormHead'
+
+const PlaceForm = ({ propObject, propPage }) => {
+  const collection = 'places'
+  const [place, setPlace] = useState(propObject)
   const [page, setPage] = useState(propPage)
   const [coordinates, setCoordinates] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -52,8 +52,8 @@ const PlaceForm = ({ propPlace, propPage }) => {
   const main = (
     <Grid container spacing={4}>
       {/* left column */}
-      <PlaceFormDescription
-        place={place}
+      <FormDescription
+        object={place}
         onChange={handleChange}
         setImage={(file) => setPlace({ ...place, image: file.url })}
       />
@@ -76,11 +76,11 @@ const PlaceForm = ({ propPlace, propPage }) => {
 
   return (
     <div>
-      <PlaceFormHead
-        place={place}
+      <FormHead
+        object={place}
+        collection={collection}
         isLoading={isLoading}
         onChange={handleChange}
-        onDelete={() => router.push('/places')}
         onSend={send}
       />
 
@@ -93,7 +93,7 @@ const PlaceForm = ({ propPlace, propPage }) => {
 }
 
 PlaceForm.defaultProps = {
-  propPlace: {
+  propObject: {
     ...PLACE,
   },
   propPage: {

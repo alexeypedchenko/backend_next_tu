@@ -2,16 +2,19 @@ import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getDbDocsByOrder } from '../../firebase/firebaseFirestore'
-import PlaceCreate from '../../components/PlaceForm/PlaceCreate'
-import PlaceDelete from '../../components/PlaceForm/PlaceDelete'
 import Table from '../../components/Table/Table'
+import ItemDelete from '../../components/FormBlocks/ItemDelete'
+import ItemCreate from '../../components/FormBlocks/ItemCreate'
 
 import Button from '@mui/material/Button'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { Context } from '../../components/Layouts/DefaultLayout'
+
+import { Context } from '../../components/Layout/DefaultLayout'
+import { PLACE } from '../../models'
 
 const Index = () => {
+  const collection = 'places'
   const router = useRouter()
   const { places, setPlaces } = useContext(Context)
   const [start, setStart] = useState(0)
@@ -26,7 +29,7 @@ const Index = () => {
     <div>
       <div className="page-head">
         <h1>Places</h1>
-        <PlaceCreate />
+        <ItemCreate model={PLACE} collection={collection} />
       </div>
 
       <Table
@@ -59,8 +62,9 @@ const Index = () => {
                 >
                   Изменить
                 </Button>
-                <PlaceDelete
-                  place={place}
+                <ItemDelete
+                  id={place.id}
+                  collection={collection}
                   onDelete={() => setPlaces(places.filter((plc) => plc.id !== place.id))}
                 />
               </TableCell>

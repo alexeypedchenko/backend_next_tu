@@ -2,17 +2,20 @@ import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getDbDocsByOrder } from '../../firebase/firebaseFirestore'
-import RouteCreate from '../../components/RouteForm/RouteCreate'
-import RouteDelete from '../../components/RouteForm/RouteDelete'
+import ItemCreate from '../../components/FormBlocks/ItemCreate'
+import ItemDelete from '../../components/FormBlocks/ItemDelete'
+
+import { ROUTE } from '../../models'
 
 import Button from '@mui/material/Button'
 import Table from '../../components/Table/Table'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 
-import { Context } from '../../components/Layouts/DefaultLayout'
+import { Context } from '../../components/Layout/DefaultLayout'
 
 const Index = () => {
+  const collection = 'routes'
   const router = useRouter()
 
   const [routes, setRoutes] = useState([])
@@ -32,7 +35,7 @@ const Index = () => {
     <div>
       <div className="page-head">
         <h1>Маршруты</h1>
-        <RouteCreate />
+        <ItemCreate model={ROUTE} collection={collection} />
       </div>
 
       <Table
@@ -65,8 +68,9 @@ const Index = () => {
                 >
                   Изменить
                 </Button>
-                <RouteDelete
-                  route={route}
+                <ItemDelete
+                  id={route.id}
+                  collection={collection}
                   onDelete={() => setRoutes(routes.filter((rt) => rt.id !== route.id))}
                 />
               </TableCell>

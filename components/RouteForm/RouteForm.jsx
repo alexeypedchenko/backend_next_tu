@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router'
 
-import { addDbDoc, deleteDbDoc, updateDbDoc, setDbDoc } from '../../firebase/firebaseFirestore'
+import { updateDbDoc } from '../../firebase/firebaseFirestore'
 import { setChangeState } from '../../utils/setChangeState'
 import { ROUTE, PAGE } from '../../models';
 
 import Tabs from '../Tabs/Tabs';
 import PageBuilder from '../PageBuilder/PageBuilder'
+import FormDescription from '../FormBlocks/FormDescription';
+import FormHead from '../FormBlocks/FormHead';
 
-// import PlaceFormMap from './PlaceFormMap';
-// import PlaceFormDescription from './PlaceFormDescription';
-import RouteFormHead from './RouteFormHead';
 import Grid from '@mui/material/Grid'
 
-const PlaceForm = ({ propRoute, propPage }) => {
-  const router = useRouter()
-  const [route, setRoute] = useState(propRoute)
+const PlaceForm = ({ propObject, propPage }) => {
+  const collection = 'routes'
+  const [route, setRoute] = useState(propObject)
   const [page, setPage] = useState(propPage)
   const [coordinates, setCoordinates] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -50,7 +48,14 @@ const PlaceForm = ({ propRoute, propPage }) => {
   }
 
   const main = (
-    <div>main</div>
+    <Grid container spacing={4}>
+      {/* left column */}
+      <FormDescription
+        object={route}
+        onChange={handleChange}
+        setImage={(file) => setRoute({ ...route, image: file.url })}
+      />
+    </Grid>
   )
 
   const pageBuilder = (
@@ -63,11 +68,11 @@ const PlaceForm = ({ propRoute, propPage }) => {
 
   return (
     <div>
-      <RouteFormHead
-        route={route}
+      <FormHead
+        object={route}
+        collection={collection}
         isLoading={isLoading}
         onChange={handleChange}
-        onDelete={() => router.push('/routes')}
         onSend={send}
       />
 
@@ -80,7 +85,7 @@ const PlaceForm = ({ propRoute, propPage }) => {
 }
 
 PlaceForm.defaultProps = {
-  propRoute: {
+  propObject: {
     ...ROUTE,
   },
   propPage: {

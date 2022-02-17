@@ -11,15 +11,15 @@ import Select from '@mui/material/Select';
 
 import { regions, tags } from '../../models/other'
 
-const PlaceFormDescription = ({ place, onChange, setImage }) => {
+const FormDescription = ({ object, onChange, setImage }) => {
   return (
     <Grid item xs={12} sm={6}>
       <FileManager
         title="Выбрать изображение"
-        folder={place.id}
+        folder={object.id}
         onSelect={setImage}
       />
-      {place.image && (<img src={place.image} style={{
+      {object.image && (<img src={object.image} style={{
         maxWidth: '100%',
         width: 300,
         height: 'auto',
@@ -31,8 +31,8 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
       <TextField
         style={{ marginBottom: 20, width: '100%' }}
         label="Название"
-        placeholder="Введите название места"
-        value={place.name}
+        placeholder="Введите название"
+        value={object.name}
         name="name"
         onChange={onChange}
       />
@@ -40,8 +40,8 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
       <span>Описание</span>
       <TextareaAutosize
         minRows={1}
-        placeholder="Введите описание места"
-        defaultValue={place.description}
+        placeholder="Введите описание"
+        defaultValue={object.description}
         name="description"
         onChange={onChange}
         style={{
@@ -58,7 +58,7 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
         <Select
           labelId="region-label"
           name="region"
-          value={place.region}
+          value={object.region}
           onChange={onChange}
           input={<OutlinedInput label="Регион" />}
         >
@@ -71,7 +71,7 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
         <Select
           labelId="selectTag"
           id="demo-simple-select"
-          value={place.tags}
+          value={object.tags}
           label="Теги"
           name="tags"
           multiple
@@ -86,4 +86,4 @@ const PlaceFormDescription = ({ place, onChange, setImage }) => {
   )
 }
 
-export default PlaceFormDescription
+export default FormDescription

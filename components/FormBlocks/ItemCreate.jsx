@@ -2,24 +2,25 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import { addDbDoc, setDbDoc } from '../../firebase/firebaseFirestore'
-import { ROUTE, PAGE } from '../../models';
+import { PAGE } from '../../models';
 import Button from '@mui/material/Button';
 
-const RouteCreate = () => {
+const ItemCreate = ({ model, collection }) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  const createNewRoute = async () => {
+  const createNew = async () => {
+    if (model === null || collection === null) return
     setIsLoading(true)
     try {
-      const docId = await addDbDoc('routes', ROUTE)
+      const docId = await addDbDoc(collection, model)
       await setDbDoc('pages', docId, PAGE)
       await setDbDoc('_storage', docId, {
         folder: docId,
         files: [],
       })
-      toast.success('Route created successfully')
-      router.push(`/routes/${docId}`)
+      toast.success('New item created successfully')
+      router.push(`/${collection}/${docId}`)
     } catch (error) {
       console.log('error:', error)
     } finally {
@@ -28,10 +29,15 @@ const RouteCreate = () => {
   }
 
   return (
-    <Button variant="contained" disabled={isLoading} onClick={createNewRoute}>
-      {isLoading ? 'Создаем...' : 'Создать новой маршрут'}
+    <Button variant="contained" disabled={isLoading} onClick={createNew}>
+      {isLoading ? 'Создаем...' : 'Создать новый'}
     </Button>
   )
 };
 
-export default RouteCreate;
+ItemCreate.defaultProps = {
+  model: null,
+  collection: null,
+}
+
+export default ItemCreate;

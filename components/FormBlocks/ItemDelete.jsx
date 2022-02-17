@@ -4,20 +4,19 @@ import { deleteDbDoc } from '../../firebase/firebaseFirestore'
 import AlertDialog from '../Dialog/Dialog'
 import { deleteStorageItems } from '../../firebase/firebaseStorage'
 
-const PlaceDelete = ({ place, onDelete, ...props }) => {
+const ItemDelete = ({ id, collection, onDelete, ...props }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const deleteDoc = async () => {
-    const { id } = place
-    if (id === null) return
+    if (id === null || collection === null) return
     setIsLoading(true)
     try {
-      await deleteDbDoc('places', id)
+      await deleteDbDoc(collection, id)
       await deleteDbDoc('pages', id)
       await deleteDbDoc('_storage', id)
       deleteStorageItems(id)
       onDelete()
-      toast.warn('Place was deleted')
+      toast.warn('Object was deleted')
     } catch (error) {
       console.log('error:', error)
     } finally {
@@ -27,7 +26,7 @@ const PlaceDelete = ({ place, onDelete, ...props }) => {
 
   return (
     <AlertDialog
-      title={`Вы действительно хотите удалить ${place.name}?`}
+      title="Вы действительно хотите удалить объект?"
       btnText="Удалить"
       color="error"
       isLoading={isLoading}
@@ -37,12 +36,10 @@ const PlaceDelete = ({ place, onDelete, ...props }) => {
   )
 };
 
-PlaceDelete.defaultProps = {
-  place: {
-    name: '',
-    id: null
-  },
+ItemDelete.defaultProps = {
+  collection: null,
+  id: null,
   onDelete: () => { }
 }
 
-export default PlaceDelete;
+export default ItemDelete;

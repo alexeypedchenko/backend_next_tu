@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
-import DefaultLayout from '../components/Layouts/DefaultLayout'
+import DefaultLayout from '../components/Layout/DefaultLayout'
 import StoreProviderHoc from '../store/StoreProviderHoc'
 import { ToastContainer } from 'react-toastify';
 
