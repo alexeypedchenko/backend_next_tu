@@ -40,13 +40,13 @@ const Layout = ({ children }) => {
   )
 
   return (
-    <Context.Provider value={{places, setPlaces}}>
+    <Context.Provider value={{ places, setPlaces }}>
       <Header />
       <div style={{
         display: 'flex',
         height: 'calc(100vh - 60px)',
       }}>
-        <Aside/>
+        <Aside />
         <main style={{
           padding: 20,
           overflowY: 'auto',

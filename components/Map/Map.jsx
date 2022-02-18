@@ -2,11 +2,13 @@ import React, { useEffect, useState, memo } from 'react'
 import { GoogleMap } from '../../googleMap/googleMap'
 import styles from './Map.module.css'
 
-const Map = ({ markers, setCoordinates }) => {
+const Map = ({ markers, setCoordinates, draggable }) => {
+  console.log('markers:', markers)
   const [map, setMap] = useState(null)
 
   useEffect(() => {
     const gmap = new GoogleMap('#map', {
+      draggable,
       onDragend: (coords) => {
         setCoordinates(coords)
       }
@@ -21,7 +23,7 @@ const Map = ({ markers, setCoordinates }) => {
   }, [map, markers])
 
   return (
-    <div>
+    <div style={{width: '100%'}}>
       <div className={styles.map} id="map">
       </div>
     </div>
@@ -29,6 +31,7 @@ const Map = ({ markers, setCoordinates }) => {
 }
 
 Map.defaultProps = {
+  draggable: true,
   markers: [{ coordinates: { lat: 46.48, lng: 30.72 } }],
   setCoordinates: (coords) => console.log(coords),
 }
@@ -36,7 +39,12 @@ Map.defaultProps = {
 const areEqual = (prevProps, nextProps) => {
   const prevCoords = prevProps.markers[0].coordinates
   const nextCoords = nextProps.markers[0].coordinates
+
+  const prevMarkersId = JSON.stringify(prevProps.markers.map((marker) => marker.id))
+  const nextMarkersId = JSON.stringify(nextProps.markers.map((marker) => marker.id))
+
   const reuslt = prevCoords === nextCoords
+    && prevMarkersId === nextMarkersId
   return reuslt
 }
 

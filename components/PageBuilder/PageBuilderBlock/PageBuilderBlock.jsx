@@ -3,7 +3,7 @@ import styles from './PageBuilderBlock.module.css'
 import FileManager from '../../FileManager/FileManager'
 import { useDrag, useDrop } from 'react-dnd'
 
-const PageBuilderBlock = ({ id, block, index, storage, isCollapsed, onDelete, onChange, moveItems }) => {
+const PageBuilderBlock = ({ id, block, index, storage, onDelete, onChange, moveItems }) => {
   const ref = useRef(null)
   const [{ handlerId }, drop] = useDrop({
     accept: 'PageBuilderBlock',

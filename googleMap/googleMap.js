@@ -2,7 +2,10 @@ import { Loader } from '@googlemaps/js-api-loader'
 import MarkerClusterer from '@googlemaps/markerclustererplus'
 
 export class GoogleMap {
-  constructor(selector, { onDragend } = {}) {
+  constructor(selector, {
+    draggable = true,
+    onDragend = null,
+  }) {
     this.loader = new Loader({
       apiKey: 'AIzaSyBOMQAKjVaaYfe_fSHNn3CBFcbNS651GnA',
       version: 'weekly',
@@ -42,6 +45,8 @@ export class GoogleMap {
 
     this.coordinates = null
 
+    this.draggable = draggable
+    console.log('this.draggable:', this.draggable)
     this.onDragend = onDragend
   }
 
@@ -144,7 +149,7 @@ export class GoogleMap {
   createMarker(marker, onMap = false) {
     if (!marker) return
     const options = {
-      draggable: true,
+      draggable: this.draggable,
       position: {
         lat: +marker.coordinates.lat,
         lng: +marker.coordinates.lng,

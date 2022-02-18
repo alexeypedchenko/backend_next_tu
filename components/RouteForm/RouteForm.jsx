@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo, useContext } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { toast } from 'react-toastify';
 
 import { updateDbDoc } from '../../firebase/firebaseFirestore'
@@ -9,22 +11,30 @@ import Tabs from '../Tabs/Tabs';
 import PageBuilder from '../PageBuilder/PageBuilder'
 import FormDescription from '../FormBlocks/FormDescription';
 import FormHead from '../FormBlocks/FormHead';
+import RouteConstructor from './RouteConstructor'
 
 import Grid from '@mui/material/Grid'
+
+import { Context } from '../Layout/DefaultLayout'
 
 const PlaceForm = ({ propObject, propPage }) => {
   const collection = 'routes'
   const [route, setRoute] = useState(propObject)
   const [page, setPage] = useState(propPage)
-  const [coordinates, setCoordinates] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { places } = useContext(Context)
+
+  const localRoute = useMemo(() => {
+    return route.places.map((place, idx) => {
+      const index = places.findIndex((pl) => pl.id === place)
+      return {
+        ...places[index],
+        index: idx,
+      }
+    })
+  }, [route.places])
 
   const handleChange = (event) => setChangeState(event, route, setRoute)
-
-  useEffect(() => {
-    if (!coordinates) return
-    setRoute({ ...route, coordinates })
-  }, [coordinates])
 
   const send = async () => {
     setIsLoading(true)
@@ -58,12 +68,21 @@ const PlaceForm = ({ propObject, propPage }) => {
     </Grid>
   )
 
+  const routeConstructor = <RouteConstructor
+    onChange={handleChange}
+    routePlaces={route.places}
+    places={places}
+    route={localRoute}
+  />
+
   const pageBuilder = (
-    <PageBuilder
-      blocks={page.blocks}
-      setBlocks={(blocks) => setPage({ ...page, blocks })}
-      storage={route.id}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <PageBuilder
+        blocks={page.blocks}
+        setBlocks={(blocks) => setPage({ ...page, blocks })}
+        storage={route.id}
+      />
+    </DndProvider>
   )
 
   return (
@@ -78,8 +97,9 @@ const PlaceForm = ({ propObject, propPage }) => {
 
       <Tabs content={[
         { title: 'Основное', content: main },
+        { title: 'Маршрут', content: routeConstructor },
         { title: 'Конструктор страницы', content: pageBuilder },
-      ]}/>
+      ]} />
     </div>
   )
 }
