@@ -31,6 +31,17 @@ export const ROUTE = {
   ...FILTERS,
 }
 
+export const LOCATION = {
+  type: 'location',
+  // slug: 'location-name',
+  isPublished: false,
+  name: 'new location',
+  description: 'description',
+  image: 'https://via.placeholder.com/120x80?text=img-location',
+  places: [],
+  ...FILTERS,
+}
+
 export const PAGE = {
   type: 'page',
   blocks: [],

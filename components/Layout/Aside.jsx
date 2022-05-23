@@ -13,11 +13,13 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import HomeIcon from '@mui/icons-material/Home';
 import CastleIcon from '@mui/icons-material/Castle';
 import RouteIcon from '@mui/icons-material/Route';
+import LocationIcon from '@mui/icons-material/CropOriginal';
 
 const links = [
   { name: 'Home', path: '/', icon: HomeIcon },
   { name: 'Places', path: '/places', icon: CastleIcon },
   { name: 'Routes', path: '/routes', icon: RouteIcon },
+  { name: 'Locations', path: '/locations', icon: LocationIcon },
 ]
 
 const Aside = () => {

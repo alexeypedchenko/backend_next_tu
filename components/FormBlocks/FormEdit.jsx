@@ -23,7 +23,7 @@ const FormEdit = ({ id, collection, Form }) => {
           Назад
         </Button>
       </div>
-      {object && page && (<Form propObject={object} propPage={page} />)}
+      {object && page && Form && (<Form propObject={object} propPage={page} />)}
     </div>
   )
 }
